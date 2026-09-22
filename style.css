@@ -10,6 +10,7 @@
   --surface: #eee4da;
   --accent: #8f7a66;
   --accent-dark: #6f5b4a;
+  --link-color: #6f5b4a;
 
   --tile-2-bg: #eee4da;      --tile-2-fg: #4a4238;
   --tile-4-bg: #ede0c8;      --tile-4-fg: #4a4238;
@@ -303,7 +304,7 @@ body {
 }
 
 .attribution a {
-  color: var(--accent-dark);
+  color: var(--link-color);
   text-decoration: underline;
 }
 
@@ -317,6 +318,7 @@ body {
   --surface: #3a352e;
   --accent: #6f5b4a;
   --accent-dark: #4c3d31;
+  --link-color: #d8b992;
 }
 
 :root[data-theme="dark"] body {
