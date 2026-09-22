@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>2048</title>
+<meta name="description" content="Play 2048 in your browser — responsive, with keyboard and swipe support.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <h1 class="title">2048</h1>
+    <div class="header-right">
+      <div class="scores">
+        <div class="score-box">
+          <span class="score-label">Score</span>
+          <span class="score-value" id="score">0</span>
+        </div>
+        <div class="score-box">
+          <span class="score-label">Best</span>
+          <span class="score-value" id="best">0</span>
+        </div>
+      </div>
+      <button class="btn-new-game" id="new-game-btn" type="button">New Game</button>
+    </div>
+  </header>
+
+  <p class="hint">Swipe or use the arrow keys to merge matching tiles. Reach <strong>2048</strong> to win!</p>
+
+  <main class="board-wrap">
+    <div class="board" id="board">
+      <div class="grid-bg" id="grid-bg" aria-hidden="true"></div>
+      <div class="tile-layer" id="tile-layer"></div>
+      <div class="overlay" id="overlay" hidden>
+        <div class="overlay-box">
+          <p class="overlay-title" id="overlay-title">You Win!</p>
+          <div class="overlay-actions">
+            <button class="btn-overlay btn-secondary" id="overlay-continue-btn" type="button">Keep Playing</button>
+            <button class="btn-overlay btn-primary" id="overlay-retry-btn" type="button">New Game</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p class="attribution">
+      Inspired by
+      <a href="https://github.com/gabrielecirulli/2048" target="_blank" rel="noopener noreferrer">2048 by Gabriele Cirulli</a>
+    </p>
+  </footer>
+
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
