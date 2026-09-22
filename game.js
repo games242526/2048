@@ -369,7 +369,7 @@
   // --- Theme toggle (defaults to light; never follows system preference) ---
   function applyTheme(theme) {
     document.documentElement.setAttribute("data-theme", theme);
-    themeToggleBtn.textContent = theme === "dark" ? "🌙" : "💡";
+    themeToggleBtn.textContent = theme === "dark" ? "🌙" : "☀️";
   }
 
   applyTheme(localStorage.getItem(THEME_KEY) === "dark" ? "dark" : "light");
