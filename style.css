@@ -371,7 +371,7 @@ body {
    row of chrome above/below a usably-sized board. Trim the non-essential
    bits first so the board has more room to work with before it's forced
    down to its minimum size. */
-@media (max-height: 480px) {
+@media (max-height: 700px) {
   .app {
     gap: 4px;
     padding: 8px clamp(12px, 3vw, 24px);
@@ -395,7 +395,7 @@ body {
     padding: 5px 14px;
   }
   .footer {
-    display: none;
+    font-size: 10px;
   }
 }
 
@@ -405,7 +405,7 @@ body {
    column on the right so the board sits truly centered in the viewport
    rather than looking shoved off to one side. The board can then use the
    full height without ever overlapping or needing a scroll. */
-@media (max-height: 480px) and (min-width: 560px) {
+@media (max-height: 700px) and (min-width: 560px) {
   .app {
     display: grid;
     grid-template-columns: minmax(160px, 240px) minmax(0, 1fr) minmax(160px, 240px);
