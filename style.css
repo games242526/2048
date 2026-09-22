@@ -65,13 +65,14 @@ body {
   display: contents;
 }
 
-.topbar { order: 1; }
-.hint { order: 3; }
-.board-wrap { order: 4; }
-.action-row { order: 5; }
-.footer { order: 6; }
+.heading { order: 1; }
+.above-game { order: 2; }
+.board-wrap { order: 3; }
+.footer { order: 4; }
 
-.topbar {
+/* Row 1: title left, score/best right — same arrangement as the original
+   2048's .heading (h1.title floated left, .scores-container floated right). */
+.heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -79,23 +80,16 @@ body {
   gap: 8px 10px;
 }
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
 .title {
   margin: 0;
   flex-shrink: 0;
-  font-size: clamp(24px, 7vw, 36px);
+  font-size: clamp(26px, 7.5vw, 48px);
   font-weight: 800;
   color: var(--ink);
   letter-spacing: 1px;
 }
 
-.scores {
+.scores-container {
   display: flex;
   gap: 8px;
 }
@@ -125,14 +119,34 @@ body {
   font-weight: 700;
 }
 
-.hint {
+/* Row 2: hint text left, action buttons right — same arrangement as the
+   original's .above-game (.game-intro floated left, .restart-button right).
+   Undo and the theme toggle are our own additions, styled like New Game
+   (the original's only button here) rather than as a separate custom row. */
+.above-game {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+}
+
+.game-intro {
   margin: 0;
   font-size: clamp(12px, 3vw, 14px);
   color: var(--ink-soft);
   line-height: 1.4;
 }
 
-.btn-new-game {
+.game-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.btn-new-game,
+.btn-undo {
   flex-shrink: 0;
   border: none;
   background: var(--accent-dark);
@@ -145,8 +159,15 @@ body {
   touch-action: manipulation;
 }
 
-.btn-new-game:active {
+.btn-new-game:active,
+.btn-undo:active {
   background: var(--accent);
+}
+
+.btn-undo:disabled {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
 }
 
 .btn-theme-toggle {
@@ -317,42 +338,6 @@ body {
   color: var(--ink);
 }
 
-.action-row {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.btn-undo {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  border: none;
-  background: var(--surface);
-  color: var(--ink);
-  font-weight: 700;
-  font-size: clamp(12px, 3vw, 14px);
-  padding: 8px 16px;
-  border-radius: var(--radius);
-  cursor: pointer;
-  touch-action: manipulation;
-}
-
-.btn-undo span {
-  font-size: 1.2em;
-  line-height: 1;
-}
-
-.btn-undo:active {
-  background: var(--cell-bg);
-}
-
-.btn-undo:disabled {
-  opacity: 0.4;
-  cursor: default;
-  pointer-events: none;
-}
-
 .footer {
   text-align: center;
 }
@@ -377,7 +362,7 @@ body {
     gap: 4px;
     padding: 8px clamp(12px, 3vw, 24px);
   }
-  .hint {
+  .game-intro {
     display: none;
   }
   .title {
@@ -386,14 +371,9 @@ body {
   .score-box {
     padding: 3px 10px;
   }
-  .btn-new-game {
-    padding: 6px 12px;
-  }
-  .action-row {
-    margin: 0;
-  }
+  .btn-new-game,
   .btn-undo {
-    padding: 5px 14px;
+    padding: 6px 12px;
   }
   .footer {
     font-size: 10px;
@@ -412,6 +392,7 @@ body {
     padding: 6px clamp(12px, 3vw, 24px);
     gap: 2px;
   }
+  .btn-new-game,
   .btn-undo {
     padding: 2px 10px;
     font-size: 11px;
