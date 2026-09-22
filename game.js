@@ -4,6 +4,7 @@
   const SIZE = 4;
   const WIN_VALUE = 2048;
   const BEST_SCORE_KEY = "game2048_best_score";
+  const THEME_KEY = "game2048_theme";
   const SWIPE_THRESHOLD = 24;
 
   const DIRECTIONS = {
@@ -24,6 +25,7 @@
   const overlayContinueBtn = document.getElementById("overlay-continue-btn");
   const overlayRetryBtn = document.getElementById("overlay-retry-btn");
   const newGameBtn = document.getElementById("new-game-btn");
+  const themeToggleBtn = document.getElementById("theme-toggle-btn");
 
   let cells = [];
   let tiles = new Map();
@@ -299,6 +301,20 @@
   function hideOverlay() {
     overlayEl.hidden = true;
   }
+
+  // --- Theme toggle (defaults to light; never follows system preference) ---
+  function applyTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    themeToggleBtn.textContent = theme === "dark" ? "🌙" : "💡";
+  }
+
+  applyTheme(localStorage.getItem(THEME_KEY) === "dark" ? "dark" : "light");
+
+  themeToggleBtn.addEventListener("click", () => {
+    const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    localStorage.setItem(THEME_KEY, next);
+    applyTheme(next);
+  });
 
   // --- Keyboard input ---
   const KEY_MAP = {

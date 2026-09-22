@@ -47,6 +47,7 @@ body {
   width: 100%;
   max-width: 560px;
   height: 100%;
+  max-height: 820px;
   padding: clamp(12px, 3vw, 24px);
   display: flex;
   flex-direction: column;
@@ -127,6 +128,27 @@ body {
 
 .btn-new-game:active {
   background: var(--accent);
+}
+
+.btn-theme-toggle {
+  flex-shrink: 0;
+  border: none;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: clamp(16px, 4vw, 20px);
+  line-height: 1;
+  width: clamp(34px, 8vw, 40px);
+  height: clamp(34px, 8vw, 40px);
+  border-radius: var(--radius);
+  cursor: pointer;
+  touch-action: manipulation;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-theme-toggle:active {
+  background: var(--cell-bg);
 }
 
 .board-wrap {
@@ -285,17 +307,18 @@ body {
   text-decoration: underline;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #1b1917;
-    --ink: #f2ece2;
-    --ink-soft: #b7ada0;
-    --board-bg: #2a2621;
-    --cell-bg: rgba(255, 255, 255, 0.06);
-    --overlay-bg: rgba(27, 25, 23, 0.82);
-    --surface: #3a352e;
-    --accent: #6f5b4a;
-    --accent-dark: #4c3d31;
-  }
-  body { background: var(--bg); }
+:root[data-theme="dark"] {
+  --bg: #1b1917;
+  --ink: #f2ece2;
+  --ink-soft: #b7ada0;
+  --board-bg: #2a2621;
+  --cell-bg: rgba(255, 255, 255, 0.06);
+  --overlay-bg: rgba(27, 25, 23, 0.82);
+  --surface: #3a352e;
+  --accent: #6f5b4a;
+  --accent-dark: #4c3d31;
+}
+
+:root[data-theme="dark"] body {
+  background: var(--bg);
 }
