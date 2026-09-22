@@ -102,7 +102,8 @@
   }
 
   function measureBoard() {
-    const fitSize = Math.min(boardWrapEl.clientWidth, boardWrapEl.clientHeight, 500);
+    const MIN_BOARD_SIZE = 150;
+    const fitSize = Math.max(MIN_BOARD_SIZE, Math.min(boardWrapEl.clientWidth, boardWrapEl.clientHeight, 500));
     boardEl.style.width = `${fitSize}px`;
     boardEl.style.height = `${fitSize}px`;
 
@@ -120,6 +121,14 @@
     el.style.top = `${row * (cellSize + gapSize)}px`;
     el.style.width = `${cellSize}px`;
     el.style.height = `${cellSize}px`;
+  }
+
+  // Size text off the actual measured cell, not viewport vw units, so it still
+  // fits when the board is constrained by height (or the min-size floor) and
+  // ends up much smaller than its width would otherwise suggest.
+  function fontSizeForDigits(digitCount) {
+    const ratio = digitCount <= 2 ? 0.5 : digitCount === 3 ? 0.42 : digitCount === 4 ? 0.34 : 0.27;
+    return Math.max(8, cellSize * ratio);
   }
 
   function render(skipAnimation) {
@@ -142,6 +151,7 @@
       el.textContent = String(tile.value);
       el.dataset.value = String(tile.value);
       el.dataset.super = tile.value > WIN_VALUE ? "true" : "false";
+      el.style.fontSize = `${fontSizeForDigits(String(tile.value).length)}px`;
 
       // Force layout so a later position change still transitions,
       // even for elements inserted this same frame.
