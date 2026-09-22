@@ -108,10 +108,37 @@
   }
 
   function measureBoard() {
-    const MIN_BOARD_SIZE = 80;
+    // Never scrolling is a harder requirement than keeping the board above
+    // some "readable" size — this floor only guards against 0/negative CSS
+    // values in a pathologically tiny embed, so it must stay well below any
+    // realistic available space. A bigger floor here would force the board
+    // past whatever room is actually left and cause exactly the scrollbar
+    // this app is built to avoid.
+    const MIN_BOARD_SIZE = 20;
     const fitSize = Math.max(MIN_BOARD_SIZE, Math.min(boardWrapEl.clientWidth, boardWrapEl.clientHeight, 500));
     boardEl.style.width = `${fitSize}px`;
     boardEl.style.height = `${fitSize}px`;
+
+    // --gap is normally sized off viewport width (clamp(8px, 2.2vw, 14px)),
+    // which stays large even when the board itself has been squeezed down to
+    // fit a short viewport — on a wide-but-short screen that leaves a tiny
+    // board with a disproportionately large gap eating most of it, shrinking
+    // cells enough that multi-digit tile text gets clipped. Pin the gap to a
+    // share of the board's own real size instead so it always scales with it.
+    const gap = Math.max(1, fitSize * 0.028);
+    boardEl.style.setProperty("--gap", `${gap}px`);
+
+    // The win/game-over overlay's title and buttons were sized off viewport
+    // width too, so on a short viewport they could end up taller than the
+    // (height-constrained) board itself — overflow:hidden then clipped the
+    // "New Game" retry button out of the clickable area entirely. Scale them
+    // with the board's real size instead, same as the tile font sizing.
+    boardEl.style.setProperty("--overlay-title-size", `${Math.max(10, fitSize * 0.064)}px`);
+    boardEl.style.setProperty("--overlay-title-gap", `${Math.max(2, fitSize * 0.032)}px`);
+    boardEl.style.setProperty("--overlay-box-padding", `${Math.max(2, fitSize * 0.032)}px`);
+    boardEl.style.setProperty("--overlay-btn-size", `${Math.max(8, fitSize * 0.03)}px`);
+    boardEl.style.setProperty("--overlay-btn-padding", `${Math.max(1, fitSize * 0.02)}px ${Math.max(3, fitSize * 0.036)}px`);
+    boardEl.style.setProperty("--overlay-actions-gap", `${Math.max(2, fitSize * 0.02)}px`);
 
     // Measure the real rendered grid cells instead of recomputing gap/cell size
     // from the --gap custom property, since clamp()/vw values read back as an

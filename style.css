@@ -306,19 +306,28 @@ body {
 
 .overlay-box {
   text-align: center;
-  padding: 16px;
+  /* Sized off the board's own real pixel size (set in measureBoard()), not
+     viewport width — a fixed vw-based size doesn't shrink when the board is
+     squeezed by a short viewport, and the overlay content (title + two
+     buttons) ends up taller than the board, pushing "New Game" out of the
+     clipped, clickable area entirely. */
+  padding: var(--overlay-box-padding, 16px);
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 .overlay-title {
-  font-size: clamp(22px, 6vw, 32px);
+  font-size: var(--overlay-title-size, clamp(22px, 6vw, 32px));
   font-weight: 800;
-  margin: 0 0 16px;
+  margin: 0 0 var(--overlay-title-gap, 16px);
   color: var(--ink);
+  line-height: 1.2;
 }
 
 .overlay-actions {
   display: flex;
-  gap: 10px;
+  gap: var(--overlay-actions-gap, 10px);
   justify-content: center;
   flex-wrap: wrap;
 }
@@ -326,9 +335,9 @@ body {
 .btn-overlay {
   border: none;
   border-radius: var(--radius);
-  padding: 10px 18px;
+  padding: var(--overlay-btn-padding, 10px 18px);
   font-weight: 700;
-  font-size: clamp(13px, 3.4vw, 15px);
+  font-size: var(--overlay-btn-size, clamp(13px, 3.4vw, 15px));
   cursor: pointer;
   touch-action: manipulation;
 }
@@ -400,6 +409,42 @@ body {
   .btn-new-game,
   .btn-undo {
     padding: 2px 10px;
+    font-size: 11px;
+  }
+}
+
+/* Pathologically short embeds (well under any real device chrome): the
+   header/actions text alone can already approach the whole viewport height.
+   Compress it to a minimal single-line strip so the board still gets most
+   of the remaining space instead of being pushed into the scroll-triggering
+   floor in measureBoard(). */
+@media (max-height: 220px) {
+  .app {
+    padding: 4px clamp(12px, 3vw, 24px);
+    gap: 1px;
+  }
+  .title {
+    font-size: 14px;
+    letter-spacing: 0;
+  }
+  .score-box {
+    padding: 1px 6px;
+    min-width: 36px;
+  }
+  .score-label {
+    font-size: 7px;
+  }
+  .score-value {
+    font-size: 11px;
+  }
+  .btn-new-game,
+  .btn-undo {
+    padding: 1px 8px;
+    font-size: 10px;
+  }
+  .btn-theme-toggle {
+    width: 20px;
+    height: 20px;
     font-size: 11px;
   }
 }
