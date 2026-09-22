@@ -143,6 +143,11 @@ body {
   align-items: center;
   gap: 8px;
   flex-shrink: 0;
+  /* When .game-intro is long enough to force a wrap, space-between would
+     otherwise leave this alone on its own line pinned to the left — push it
+     to the right instead, staying aligned under Score/Best like the user
+     expects, whether it shares the row with the intro text or not. */
+  margin-left: auto;
 }
 
 .btn-new-game,
