@@ -106,10 +106,13 @@
     boardEl.style.width = `${fitSize}px`;
     boardEl.style.height = `${fitSize}px`;
 
-    const styles = getComputedStyle(boardEl);
-    gapSize = parseFloat(styles.getPropertyValue("--gap")) || 10;
-    const innerSize = fitSize - gapSize * 2;
-    cellSize = (innerSize - gapSize * (SIZE - 1)) / SIZE;
+    // Measure the real rendered grid cells instead of recomputing gap/cell size
+    // from the --gap custom property, since clamp()/vw values read back as an
+    // unresolved token string (parseFloat("clamp(...)") is NaN), not a px number.
+    const cell0 = gridBgEl.children[0].getBoundingClientRect();
+    const cell1 = gridBgEl.children[1].getBoundingClientRect();
+    cellSize = cell0.width;
+    gapSize = cell1.left - cell0.right;
   }
 
   function positionTileElement(el, row, col) {
