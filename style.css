@@ -104,11 +104,11 @@ body {
   background: var(--accent);
   color: #fff;
   border-radius: var(--radius);
-  padding: 8px 14px;
+  padding: 5px 12px;
   text-align: center;
   display: flex;
   flex-direction: column;
-  line-height: 1.2;
+  line-height: 1.15;
 }
 
 .score-label {
@@ -120,7 +120,7 @@ body {
 }
 
 .score-value {
-  font-size: clamp(18px, 4.5vw, 24px);
+  font-size: clamp(16px, 3.6vw, 20px);
   font-weight: 700;
 }
 
@@ -367,12 +367,28 @@ body {
   text-decoration: underline;
 }
 
-/* Short-and-wide viewports (phone landscape, a short desktop window) don't
-   have room to stack every row of chrome above/below a usably-sized board.
-   Switch to a 3-column grid instead: info on the left, board in the middle,
-   and a mirrored empty column on the right so the board sits truly centered
-   in the viewport rather than looking shoved off to one side. The board can
-   then use the full height without ever overlapping or needing a scroll. */
+/* Any short viewport (regardless of width) is tight on room to stack every
+   row of chrome above/below a usably-sized board. Trim the non-essential
+   bits first so the board has more room to work with before it's forced
+   down to its minimum size. */
+@media (max-height: 480px) {
+  .app {
+    gap: 6px;
+  }
+  .hint {
+    display: none;
+  }
+  .score-box {
+    padding: 4px 10px;
+  }
+}
+
+/* Short-AND-wide viewports (phone landscape, a short desktop window) have
+   enough spare width to go further: switch to a 3-column grid instead of
+   stacking. Info on the left, board in the middle, and a mirrored empty
+   column on the right so the board sits truly centered in the viewport
+   rather than looking shoved off to one side. The board can then use the
+   full height without ever overlapping or needing a scroll. */
 @media (max-height: 480px) and (min-width: 560px) {
   .app {
     display: grid;
@@ -380,6 +396,7 @@ body {
     align-items: stretch;
     width: 100%;
     max-width: 1100px;
+    padding: 10px clamp(12px, 3vw, 24px);
   }
   .side-panel {
     display: flex;
@@ -387,7 +404,7 @@ body {
     justify-content: center;
     grid-column: 1;
     min-width: 0;
-    gap: 10px;
+    gap: 6px;
   }
   .topbar,
   .scores,
@@ -396,14 +413,25 @@ body {
   .footer {
     order: initial;
   }
-  .hint {
-    display: none;
-  }
   .score-box {
     padding: 4px 10px;
   }
   .board-wrap {
     grid-column: 2;
+  }
+}
+
+/* Beyond even that, there's no room left for the attribution line without
+   forcing a scroll — drop it rather than break the "never scroll" rule. */
+@media (max-height: 300px) and (min-width: 560px) {
+  .footer {
+    display: none;
+  }
+  .app {
+    padding: 6px clamp(12px, 3vw, 24px);
+  }
+  .side-panel {
+    gap: 4px;
   }
 }
 
