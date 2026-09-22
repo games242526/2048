@@ -56,11 +56,33 @@ body {
   gap: clamp(8px, 2.5vw, 16px);
 }
 
+/* In normal (portrait/tall) layouts the side-panel is transparent to layout:
+   its children become direct flex items of .app. They're marked up inside
+   side-panel (for the landscape layout below), but that puts action-row and
+   footer before board-wrap in document order — use `order` to restore the
+   intended visual order: header, scores, hint, board, undo, attribution. */
+.side-panel {
+  display: contents;
+}
+
+.topbar { order: 1; }
+.scores { order: 2; }
+.hint { order: 3; }
+.board-wrap { order: 4; }
+.action-row { order: 5; }
+.footer { order: 6; }
+
 .topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  gap: 10px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
   gap: 10px;
 }
 
@@ -300,6 +322,36 @@ body {
   gap: 10px;
 }
 
+.btn-undo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: clamp(12px, 3vw, 14px);
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.btn-undo span {
+  font-size: 1.2em;
+  line-height: 1;
+}
+
+.btn-undo:active {
+  background: var(--cell-bg);
+}
+
+.btn-undo:disabled {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
+}
+
 .footer {
   text-align: center;
 }
@@ -313,6 +365,46 @@ body {
 .attribution a {
   color: var(--link-color);
   text-decoration: underline;
+}
+
+/* Short-and-wide viewports (phone landscape, a short desktop window) don't
+   have room to stack every row of chrome above/below a usably-sized board.
+   Switch to a 3-column grid instead: info on the left, board in the middle,
+   and a mirrored empty column on the right so the board sits truly centered
+   in the viewport rather than looking shoved off to one side. The board can
+   then use the full height without ever overlapping or needing a scroll. */
+@media (max-height: 480px) and (min-width: 560px) {
+  .app {
+    display: grid;
+    grid-template-columns: minmax(160px, 240px) minmax(0, 1fr) minmax(160px, 240px);
+    align-items: stretch;
+    width: 100%;
+    max-width: 1100px;
+  }
+  .side-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    grid-column: 1;
+    min-width: 0;
+    gap: 10px;
+  }
+  .topbar,
+  .scores,
+  .hint,
+  .action-row,
+  .footer {
+    order: initial;
+  }
+  .hint {
+    display: none;
+  }
+  .score-box {
+    padding: 4px 10px;
+  }
+  .board-wrap {
+    grid-column: 2;
+  }
 }
 
 :root[data-theme="dark"] {
