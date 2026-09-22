@@ -14,6 +14,8 @@
     right: { dr: 0, dc: 1 },
   };
 
+  const appEl = document.querySelector(".app");
+  const topbarEl = document.querySelector(".topbar");
   const boardEl = document.getElementById("board");
   const boardWrapEl = boardEl.parentElement;
   const gridBgEl = document.getElementById("grid-bg");
@@ -107,11 +109,51 @@
     bestEl.textContent = String(best);
   }
 
+  // The header row's own content (title + scores + buttons) has a natural
+  // width regardless of wrapping, since none of its children grow/shrink —
+  // the app must never be narrower than this or the header wraps onto an
+  // extra line, which eats into the board's available height.
+  function topbarNaturalWidth() {
+    const style = getComputedStyle(topbarEl);
+    const gap = parseFloat(style.columnGap || style.gap) || 0;
+    const children = Array.from(topbarEl.children);
+    const childrenWidth = children.reduce((sum, el) => sum + el.getBoundingClientRect().width, 0);
+    return childrenWidth + gap * Math.max(0, children.length - 1);
+  }
+
   function measureBoard() {
     const MIN_BOARD_SIZE = 80;
-    const fitSize = Math.max(MIN_BOARD_SIZE, Math.min(boardWrapEl.clientWidth, boardWrapEl.clientHeight, 500));
+
+    // Clear any previous JS-imposed width cap before measuring, so we read the
+    // true available width for this pass rather than one shrunk by an earlier call.
+    appEl.style.maxWidth = "";
+    const availableWidth = boardWrapEl.clientWidth;
+    const availableHeight = boardWrapEl.clientHeight;
+    let fitSize = Math.max(MIN_BOARD_SIZE, Math.min(availableWidth, availableHeight, 500));
     boardEl.style.width = `${fitSize}px`;
     boardEl.style.height = `${fitSize}px`;
+
+    // When the board is height-constrained well below the available width (short
+    // or landscape viewports), the rest of the card (header/hint/footer) would
+    // otherwise stay full-width and look disproportionate next to a small board.
+    // Shrink the whole app to track the board's real size so it stays a cohesive,
+    // proportionate card instead of a tiny board "swallowed" in a wide header.
+    if (fitSize < availableWidth) {
+      const appStyle = getComputedStyle(appEl);
+      const horizontalPadding = parseFloat(appStyle.paddingLeft) + parseFloat(appStyle.paddingRight);
+      const headerFloor = topbarNaturalWidth() + horizontalPadding;
+      appEl.style.maxWidth = `${Math.max(fitSize + horizontalPadding, headerFloor)}px`;
+
+      // Applying that width can change how the header wraps and thus how much
+      // height is left for the board — resettle both the board size and the
+      // app width against that post-change layout so nothing overflows.
+      const settledWidth = boardWrapEl.clientWidth;
+      const settledHeight = boardWrapEl.clientHeight;
+      fitSize = Math.max(MIN_BOARD_SIZE, Math.min(settledWidth, settledHeight, 500));
+      boardEl.style.width = `${fitSize}px`;
+      boardEl.style.height = `${fitSize}px`;
+      appEl.style.maxWidth = `${Math.max(fitSize + horizontalPadding, headerFloor)}px`;
+    }
 
     // Measure the real rendered grid cells instead of recomputing gap/cell size
     // from the --gap custom property, since clamp()/vw values read back as an

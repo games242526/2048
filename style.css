@@ -66,7 +66,6 @@ body {
 }
 
 .topbar { order: 1; }
-.scores { order: 2; }
 .hint { order: 3; }
 .board-wrap { order: 4; }
 .action-row { order: 5; }
@@ -77,18 +76,20 @@ body {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px 10px;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .title {
   margin: 0;
-  font-size: clamp(28px, 8vw, 42px);
+  flex-shrink: 0;
+  font-size: clamp(22px, 6.5vw, 34px);
   font-weight: 800;
   color: var(--ink);
   letter-spacing: 1px;
@@ -96,23 +97,23 @@ body {
 
 .scores {
   display: flex;
-  gap: 10px;
+  gap: 6px;
 }
 
 .score-box {
-  flex: 1;
   background: var(--accent);
   color: #fff;
   border-radius: var(--radius);
-  padding: 5px 12px;
+  padding: 3px 10px;
+  min-width: 52px;
   text-align: center;
   display: flex;
   flex-direction: column;
-  line-height: 1.15;
+  line-height: 1.1;
 }
 
 .score-label {
-  font-size: clamp(10px, 2.4vw, 12px);
+  font-size: 9px;
   font-weight: 700;
   text-transform: uppercase;
   opacity: 0.85;
@@ -120,7 +121,7 @@ body {
 }
 
 .score-value {
-  font-size: clamp(16px, 3.6vw, 20px);
+  font-size: clamp(13px, 3vw, 16px);
   font-weight: 700;
 }
 
