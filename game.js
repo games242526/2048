@@ -108,7 +108,7 @@
   }
 
   function measureBoard() {
-    const MIN_BOARD_SIZE = 150;
+    const MIN_BOARD_SIZE = 80;
     const fitSize = Math.max(MIN_BOARD_SIZE, Math.min(boardWrapEl.clientWidth, boardWrapEl.clientHeight, 500));
     boardEl.style.width = `${fitSize}px`;
     boardEl.style.height = `${fitSize}px`;

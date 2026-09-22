@@ -56,10 +56,10 @@ body {
   gap: clamp(8px, 2.5vw, 16px);
 }
 
-/* In normal (portrait/tall) layouts the side-panel is transparent to layout:
-   its children become direct flex items of .app. They're marked up inside
-   side-panel (for the landscape layout below), but that puts action-row and
-   footer before board-wrap in document order — use `order` to restore the
+/* The side-panel wrapper is transparent to layout: its children become
+   direct flex items of .app, always stacked in a single centered column.
+   Markup nests them inside side-panel, which puts action-row and footer
+   before board-wrap in document order — use `order` to restore the
    intended visual order: header, scores, hint, board, undo, attribution. */
 .side-panel {
   display: contents;
@@ -399,55 +399,21 @@ body {
   }
 }
 
-/* Short-AND-wide viewports (phone landscape, a short desktop window) have
-   enough spare width to go further: switch to a 3-column grid instead of
-   stacking. Info on the left, board in the middle, and a mirrored empty
-   column on the right so the board sits truly centered in the viewport
-   rather than looking shoved off to one side. The board can then use the
-   full height without ever overlapping or needing a scroll. */
-@media (max-height: 700px) and (min-width: 560px) {
-  .app {
-    display: grid;
-    grid-template-columns: minmax(160px, 240px) minmax(0, 1fr) minmax(160px, 240px);
-    align-items: stretch;
-    width: 100%;
-    max-width: 1100px;
-    padding: 10px clamp(12px, 3vw, 24px);
-  }
-  .side-panel {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    grid-column: 1;
-    min-width: 0;
-    gap: 6px;
-  }
-  .topbar,
-  .scores,
-  .hint,
-  .action-row,
-  .footer {
-    order: initial;
-  }
-  .score-box {
-    padding: 4px 10px;
-  }
-  .board-wrap {
-    grid-column: 2;
-  }
-}
-
-/* Beyond even that, there's no room left for the attribution line without
-   forcing a scroll — drop it rather than break the "never scroll" rule. */
-@media (max-height: 300px) and (min-width: 560px) {
+/* Beyond the general trim, there's no room left for the attribution line
+   without forcing a scroll — drop it rather than break the "never scroll"
+   rule. Stays a single centered column throughout (matching the classic
+   2048 look) instead of splitting into a side-by-side layout. */
+@media (max-height: 300px) {
   .footer {
     display: none;
   }
   .app {
     padding: 6px clamp(12px, 3vw, 24px);
+    gap: 2px;
   }
-  .side-panel {
-    gap: 4px;
+  .btn-undo {
+    padding: 2px 10px;
+    font-size: 11px;
   }
 }
 
