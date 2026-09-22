@@ -34,6 +34,7 @@ html, body {
   height: 100%;
   background: var(--bg);
   overscroll-behavior: none;
+  touch-action: none;
 }
 
 body {
@@ -71,23 +72,17 @@ body {
   letter-spacing: 1px;
 }
 
-.header-right {
+.scores {
   display: flex;
-  align-items: center;
   gap: 10px;
 }
 
-.scores {
-  display: flex;
-  gap: 8px;
-}
-
 .score-box {
+  flex: 1;
   background: var(--accent);
   color: #fff;
   border-radius: var(--radius);
-  padding: 6px 14px;
-  min-width: 60px;
+  padding: 8px 14px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -95,7 +90,7 @@ body {
 }
 
 .score-label {
-  font-size: clamp(10px, 2.4vw, 11px);
+  font-size: clamp(10px, 2.4vw, 12px);
   font-weight: 700;
   text-transform: uppercase;
   opacity: 0.85;
@@ -103,7 +98,7 @@ body {
 }
 
 .score-value {
-  font-size: clamp(16px, 4vw, 20px);
+  font-size: clamp(18px, 4.5vw, 24px);
   font-weight: 700;
 }
 
@@ -150,6 +145,12 @@ body {
 
 .btn-theme-toggle:active {
   background: var(--cell-bg);
+}
+
+.btn-theme-toggle:disabled {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
 }
 
 .board-wrap {
@@ -291,6 +292,12 @@ body {
 .btn-secondary {
   background: var(--surface);
   color: var(--ink);
+}
+
+.action-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 }
 
 .footer {

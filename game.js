@@ -26,6 +26,7 @@
   const overlayRetryBtn = document.getElementById("overlay-retry-btn");
   const newGameBtn = document.getElementById("new-game-btn");
   const themeToggleBtn = document.getElementById("theme-toggle-btn");
+  const undoBtn = document.getElementById("undo-btn");
 
   let cells = [];
   let tiles = new Map();
@@ -38,6 +39,7 @@
   let pendingMoveTimeout = null;
   let cellSize = 0;
   let gapSize = 0;
+  let lastSnapshot = null;
 
   function buildGridBackground() {
     gridBgEl.innerHTML = "";
@@ -86,6 +88,8 @@
     hasWon = false;
     keepPlayingAfterWin = false;
     isBusy = false;
+    lastSnapshot = null;
+    undoBtn.disabled = true;
     tileLayerEl.innerHTML = "";
     hideOverlay();
     spawnRandomTile();
@@ -192,8 +196,38 @@
     return r >= 0 && r < SIZE && c >= 0 && c < SIZE;
   }
 
+  function captureSnapshot() {
+    return {
+      cells: cells.map((row) => row.slice()),
+      tiles: new Map([...tiles].map(([id, tile]) => [id, { ...tile }])),
+      nextTileId,
+      score,
+      hasWon,
+      keepPlayingAfterWin,
+    };
+  }
+
+  function undo() {
+    if (isBusy || !lastSnapshot) return;
+    clearTimeout(pendingMoveTimeout);
+    isBusy = false;
+    cells = lastSnapshot.cells;
+    tiles = lastSnapshot.tiles;
+    nextTileId = lastSnapshot.nextTileId;
+    score = lastSnapshot.score;
+    hasWon = lastSnapshot.hasWon;
+    keepPlayingAfterWin = lastSnapshot.keepPlayingAfterWin;
+    lastSnapshot = null;
+    undoBtn.disabled = true;
+    hideOverlay();
+    scoreEl.textContent = String(score);
+    bestEl.textContent = String(best);
+    render(true);
+  }
+
   function move(direction) {
     if (isBusy || !overlayEl.hidden) return;
+    const snapshotBeforeMove = captureSnapshot();
     const vector = DIRECTIONS[direction];
     const { rows, cols } = buildTraversalOrder(vector);
     const mergedThisMove = new Set();
@@ -247,6 +281,9 @@
     }
 
     if (!moved) return;
+
+    lastSnapshot = snapshotBeforeMove;
+    undoBtn.disabled = false;
 
     updateScoreDisplay();
     render();
@@ -344,7 +381,9 @@
   let touchStartY = 0;
   let touchActive = false;
 
-  boardEl.addEventListener(
+  // Listen on the whole document (not just the board) so a swipe that starts
+  // anywhere on the page still moves tiles, matching the arrow-key behavior.
+  document.addEventListener(
     "touchstart",
     (e) => {
       if (e.touches.length !== 1) return;
@@ -355,7 +394,7 @@
     { passive: true }
   );
 
-  boardEl.addEventListener(
+  document.addEventListener(
     "touchmove",
     (e) => {
       if (!touchActive) return;
@@ -364,7 +403,7 @@
     { passive: false }
   );
 
-  boardEl.addEventListener(
+  document.addEventListener(
     "touchend",
     (e) => {
       if (!touchActive) return;
@@ -386,13 +425,14 @@
     { passive: true }
   );
 
-  boardEl.addEventListener("touchcancel", () => {
+  document.addEventListener("touchcancel", () => {
     touchActive = false;
   });
 
   // --- Buttons ---
   newGameBtn.addEventListener("click", startNewGame);
   overlayRetryBtn.addEventListener("click", startNewGame);
+  undoBtn.addEventListener("click", undo);
   overlayContinueBtn.addEventListener("click", () => {
     keepPlayingAfterWin = true;
     hideOverlay();

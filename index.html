@@ -13,21 +13,19 @@
 
   <header class="topbar">
     <h1 class="title">2048</h1>
-    <div class="header-right">
-      <div class="scores">
-        <div class="score-box">
-          <span class="score-label">Score</span>
-          <span class="score-value" id="score">0</span>
-        </div>
-        <div class="score-box">
-          <span class="score-label">Best</span>
-          <span class="score-value" id="best">0</span>
-        </div>
-      </div>
-      <button class="btn-new-game" id="new-game-btn" type="button">New Game</button>
-      <button class="btn-theme-toggle" id="theme-toggle-btn" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">💡</button>
-    </div>
+    <button class="btn-new-game" id="new-game-btn" type="button">New Game</button>
   </header>
+
+  <div class="scores">
+    <div class="score-box">
+      <span class="score-label">Score</span>
+      <span class="score-value" id="score">0</span>
+    </div>
+    <div class="score-box">
+      <span class="score-label">Best</span>
+      <span class="score-value" id="best">0</span>
+    </div>
+  </div>
 
   <p class="hint">Swipe or use the arrow keys to merge matching tiles. Reach <strong>2048</strong> to win!</p>
 
@@ -46,6 +44,11 @@
       </div>
     </div>
   </main>
+
+  <div class="action-row">
+    <button class="btn-theme-toggle" id="undo-btn" type="button" aria-label="Undo last move" title="Undo last move" disabled>↺</button>
+    <button class="btn-theme-toggle" id="theme-toggle-btn" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">💡</button>
+  </div>
 
   <footer class="footer">
     <p class="attribution">
