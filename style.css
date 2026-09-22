@@ -147,6 +147,7 @@ body {
   background: var(--board-bg);
   border-radius: calc(var(--radius) + 4px);
   padding: var(--gap);
+  overflow: hidden;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
@@ -184,6 +185,10 @@ body {
   will-change: top, left;
   background: var(--tile-2-bg);
   color: var(--tile-2-fg);
+}
+
+.tile-layer.no-transition .tile {
+  transition: none;
 }
 
 .tile[data-value="2"]    { background: var(--tile-2-bg);    color: var(--tile-2-fg); }

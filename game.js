@@ -119,8 +119,9 @@
     el.style.height = `${cellSize}px`;
   }
 
-  function render() {
+  function render(skipAnimation) {
     measureBoard();
+    if (skipAnimation) tileLayerEl.classList.add("no-transition");
     const seenIds = new Set();
 
     tiles.forEach((tile) => {
@@ -158,6 +159,10 @@
       const id = Number(el.dataset.id);
       if (!seenIds.has(id)) el.remove();
     });
+
+    if (skipAnimation) {
+      requestAnimationFrame(() => requestAnimationFrame(() => tileLayerEl.classList.remove("no-transition")));
+    }
   }
 
   function buildTraversalOrder(vector) {
@@ -368,7 +373,7 @@
   let resizeRaf = null;
   const resizeObserver = new ResizeObserver(() => {
     if (resizeRaf) cancelAnimationFrame(resizeRaf);
-    resizeRaf = requestAnimationFrame(() => render());
+    resizeRaf = requestAnimationFrame(() => render(true));
   });
   resizeObserver.observe(boardWrapEl);
 
